@@ -55,8 +55,13 @@ ENTRY(Reset_Handler)
 /* Specify the memory areas */
 MEMORY
 {
-RAM (xrw)      : ORIGIN = 0x20000000, LENGTH = 128K
-FLASH (rx)      : ORIGIN = 0x8000000, LENGTH = 512K
+  RAM (xrw)      : ORIGIN = 0x20000000, LENGTH = 128K
+  FLASH (rx)      : ORIGIN = 0x08010000, LENGTH = 0x30000
+
+  FLASH_BOOT (rx)      : ORIGIN = 0x08000000, LENGTH = 0x8000
+  FLASH_PARAM (rx)     : ORIGIN = 0x08008000, LENGTH = 0x4000
+  FLASH_PARAM_BAK (rx) : ORIGIN = 0x0800C000, LENGTH = 0x4000
+  FLASH_OTA (rx)       : ORIGIN = 0x08040000, LENGTH = 0x40000
 }
 
 /* Highest address of the user mode stack */
