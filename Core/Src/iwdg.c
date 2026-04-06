@@ -38,7 +38,9 @@ void MX_IWDG_Init(void)
 
   /* USER CODE END IWDG_Init 1 */
   hiwdg.Instance = IWDG;
-  hiwdg.Init.Prescaler = IWDG_PRESCALER_4;
+  /* LSI≈32kHz：PRESCALER_4 + RLR=4095 时超时仅约 0.5s，调度器启动与首帧喂狗前易复位。
+   * PRESCALER_64 时约 (4096)/(32000/64)≈8.2s，留足 main+RTOS 启动余量。 */
+  hiwdg.Init.Prescaler = IWDG_PRESCALER_64;
   hiwdg.Init.Reload = 4095;
   if (HAL_IWDG_Init(&hiwdg) != HAL_OK)
   {

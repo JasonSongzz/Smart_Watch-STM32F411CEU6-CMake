@@ -3,7 +3,15 @@
 
 //#include <stdlib.h>
 #include <string.h>
+#if defined(__ARMCC_VERSION)
 #include "cmsis_armcc.h"
+#elif defined(__GNUC__)
+#include "cmsis_gcc.h"
+#elif defined(__ICCARM__)
+#include "cmsis_iccarm.h"
+#else
+#error "Unsupported toolchain for OSAL CMSIS intrinsics"
+#endif
 /**
  * @brief Generic argument checking macro for non-critical values
  *

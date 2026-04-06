@@ -5307,4 +5307,37 @@ when performing module tests). */
 
 #endif
 
+/*---------------------------------------------------------------------------
+ * CmBacktrace（cm_backtrace/cmb_def.h）在 FreeRTOS 下需要的三个符号
+ *---------------------------------------------------------------------------*/
+uint32_t *vTaskStackAddr( void )
+{
+	if( pxCurrentTCB == NULL )
+	{
+		return NULL;
+	}
+	return ( uint32_t * ) pxCurrentTCB->pxStack;
+}
+
+uint32_t vTaskStackSize( void )
+{
+	if( pxCurrentTCB == NULL )
+	{
+		return 0U;
+	}
+#if ( configRECORD_STACK_HIGH_ADDRESS == 1 )
+	return ( uint32_t ) ( pxCurrentTCB->pxEndOfStack - pxCurrentTCB->pxStack ) + 1U;
+#else
+	return 0U;
+#endif
+}
+
+char *vTaskName( void )
+{
+	if( pxCurrentTCB == NULL )
+	{
+		return NULL;
+	}
+	return &( pxCurrentTCB->pcTaskName[ 0 ] );
+}
 

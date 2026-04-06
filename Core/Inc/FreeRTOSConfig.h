@@ -68,9 +68,11 @@
 #define configTICK_RATE_HZ                       ((TickType_t)1000)
 #define configMAX_PRIORITIES                     ( 56 )
 #define configMINIMAL_STACK_SIZE                 ((uint16_t)128)
-#define configTOTAL_HEAP_SIZE                    ((size_t)15360)
+#define configTOTAL_HEAP_SIZE                    ((size_t)36864)
 #define configMAX_TASK_NAME_LEN                  ( 16 )
 #define configUSE_TRACE_FACILITY                 1
+/* CmBacktrace：TCB 中记录栈顶地址，便于 vTaskStackSize() 计算栈深度 */
+#define configRECORD_STACK_HIGH_ADDRESS          1
 #define configUSE_16_BIT_TICKS                   0
 #define configUSE_MUTEXES                        1
 #define configQUEUE_REGISTRY_SIZE                8
@@ -166,5 +168,8 @@ standard names. */
 /* USER CODE BEGIN Defines */
 /* Section where parameter definitions can be added (for instance, to override default ones in FreeRTOS.h) */
 /* USER CODE END Defines */
+
+/* SEGGER SystemView：必须在 FreeRTOSConfig.h 末尾包含（官方要求） */
+#include "SEGGER_SYSVIEW_FreeRTOS.h"
 
 #endif /* FREERTOS_CONFIG_H */

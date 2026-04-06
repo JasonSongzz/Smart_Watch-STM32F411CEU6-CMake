@@ -25,11 +25,16 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <cm_backtrace.h>
+#include "Debug.h"
+#include "SEGGER_SYSVIEW.h"
+#include "User_Periph_Setup.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+#define HARDWARE_VERSION "V1.0.0"
+#define SOFTWARE_VERSION "V0.1.0"
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -77,7 +82,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
+  __enable_irq();
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -92,12 +97,18 @@ int main(void)
   MX_IWDG_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
-
+  SEGGER_SYSVIEW_Conf();
+  cm_backtrace_init("CmBacktrace", HARDWARE_VERSION, SOFTWARE_VERSION);
+  debug_elog_init();
+  app_periph_init();
   /* USER CODE END 2 */
 
   /* Init scheduler */
   osKernelInitialize();  /* Call init function for freertos objects (in cmsis_os2.c) */
   MX_FREERTOS_Init();
+
+  /* IWDG 已在 MX_IWDG_Init 中运行；喂狗任务仅在调度启动后才执行，此处先喂一次避免窗口内复位 */
+  (void)HAL_IWDG_Refresh(&hiwdg);
 
   /* Start scheduler */
   osKernelStart();

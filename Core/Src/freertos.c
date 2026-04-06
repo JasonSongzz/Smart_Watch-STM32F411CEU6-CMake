@@ -25,7 +25,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "User_Init.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -47,13 +47,6 @@
 /* USER CODE BEGIN Variables */
 
 /* USER CODE END Variables */
-/* Definitions for defaultTask */
-osThreadId_t defaultTaskHandle;
-const osThreadAttr_t defaultTask_attributes = {
-  .name = "defaultTask",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityNormal,
-};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -92,7 +85,7 @@ void MX_FREERTOS_Init(void) {
 
   /* Create the thread(s) */
   /* creation of defaultTask */
-  defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
+  UserAppTask_Init();
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -102,24 +95,6 @@ void MX_FREERTOS_Init(void) {
   /* add events, ... */
   /* USER CODE END RTOS_EVENTS */
 
-}
-
-/* USER CODE BEGIN Header_StartDefaultTask */
-/**
-  * @brief  Function implementing the defaultTask thread.
-  * @param  argument: Not used
-  * @retval None
-  */
-/* USER CODE END Header_StartDefaultTask */
-void StartDefaultTask(void *argument)
-{
-  /* USER CODE BEGIN StartDefaultTask */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
-  /* USER CODE END StartDefaultTask */
 }
 
 /* Private application code --------------------------------------------------*/

@@ -81,6 +81,7 @@ SECTIONS
   .text :
   {
     . = ALIGN(4);
+    _stext = .;        /* CmBacktrace：代码区起始（与 cmb_def.h 中 CMB_CODE_SECTION_START 一致） */
     *(.text)           /* .text sections (code) */
     *(.text*)          /* .text* sections (code) */
     *(.glue_7)         /* glue arm to thumb code */

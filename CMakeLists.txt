@@ -37,19 +37,74 @@ add_executable(${CMAKE_PROJECT_NAME})
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)
 
+# SystemView：FreeRTOSConfig.h 末尾包含 SEGGER_SYSVIEW_FreeRTOS.h，需对 stm32cubemx 可见
+target_include_directories(stm32cubemx INTERFACE
+    "${CMAKE_SOURCE_DIR}/Middlewares/Third_Party/SystemView/SEGGER"
+    "${CMAKE_SOURCE_DIR}/Middlewares/Third_Party/SystemView/Config"
+    "${CMAKE_SOURCE_DIR}/Middlewares/Third_Party/SystemView/Sample/FreeRTOSV10.4"
+)
+
 # Link directories setup
 target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined library search paths
 )
 
+set(SW_USER_SOURCES
+    "${CMAKE_SOURCE_DIR}/User/User_Init.c"
+    "${CMAKE_SOURCE_DIR}/User/User_LED/User_LED.c"
+    "${CMAKE_SOURCE_DIR}/User/User_IWDG/User_IWDG.c"
+    "${CMAKE_SOURCE_DIR}/System/User_Periph_Setup.c"
+    "${CMAKE_SOURCE_DIR}/Bsp/Platform/drv_adapter_led/drv_adapter_led.c"
+    "${CMAKE_SOURCE_DIR}/Bsp/Platform/drv_adapter_port_led/drv_adapter_port_led.c"
+    "${CMAKE_SOURCE_DIR}/Middlewares/os_adapter/shared/src/osal_timer.c"
+    "${CMAKE_SOURCE_DIR}/Middlewares/os_adapter/shared/src/osal_task.c"
+    "${CMAKE_SOURCE_DIR}/Middlewares/os_adapter/shared/src/osal_sema.c"
+    "${CMAKE_SOURCE_DIR}/Middlewares/os_adapter/shared/src/osal_queue.c"
+    "${CMAKE_SOURCE_DIR}/Middlewares/os_adapter/shared/src/osal_mutex.c"
+    "${CMAKE_SOURCE_DIR}/Middlewares/os_adapter/shared/src/osal_heap.c"
+    "${CMAKE_SOURCE_DIR}/Middlewares/os_adapter/FreeRTOS/src/os_impl_timer.c"
+    "${CMAKE_SOURCE_DIR}/Middlewares/os_adapter/FreeRTOS/src/os_impl_task.c"
+    "${CMAKE_SOURCE_DIR}/Middlewares/os_adapter/FreeRTOS/src/os_impl_sema.c"
+    "${CMAKE_SOURCE_DIR}/Middlewares/os_adapter/FreeRTOS/src/os_impl_queue.c"
+    "${CMAKE_SOURCE_DIR}/Middlewares/os_adapter/FreeRTOS/src/os_impl_mutex.c"
+    "${CMAKE_SOURCE_DIR}/Middlewares/os_adapter/FreeRTOS/src/os_impl_heap.c"
+    "${CMAKE_SOURCE_DIR}/Middlewares/Third_Party/Log/Debug/Debug.c"
+    "${CMAKE_SOURCE_DIR}/Middlewares/Third_Party/Log/easylogger/src/elog.c"
+    "${CMAKE_SOURCE_DIR}/Middlewares/Third_Party/Log/easylogger/src/elog_utils.c"
+    "${CMAKE_SOURCE_DIR}/Middlewares/Third_Party/Log/easylogger/src/elog_buf.c"
+    "${CMAKE_SOURCE_DIR}/Middlewares/Third_Party/Log/easylogger/port/elog_port.c"
+    "${CMAKE_SOURCE_DIR}/Middlewares/Third_Party/Cmbacktrace/cm_backtrace/cm_backtrace.c"
+    "${CMAKE_SOURCE_DIR}/Middlewares/Third_Party/Cmbacktrace/cm_backtrace/fault_handler/gcc/cmb_fault.S"
+    "${CMAKE_SOURCE_DIR}/Middlewares/Third_Party/SystemView/SEGGER/SEGGER_RTT.c"
+    "${CMAKE_SOURCE_DIR}/Middlewares/Third_Party/SystemView/SEGGER/SEGGER_RTT_ASM_ARMv7M.S"
+    "${CMAKE_SOURCE_DIR}/Middlewares/Third_Party/SystemView/SEGGER/SEGGER_RTT_printf.c"
+    "${CMAKE_SOURCE_DIR}/Middlewares/Third_Party/SystemView/SEGGER/SEGGER_SYSVIEW.c"
+    "${CMAKE_SOURCE_DIR}/Middlewares/Third_Party/SystemView/Sample/FreeRTOSV10.4/SEGGER_SYSVIEW_FreeRTOS.c"
+    "${CMAKE_SOURCE_DIR}/Middlewares/Third_Party/SystemView/Sample/FreeRTOSV10.4/Config/Cortex-M/SEGGER_SYSVIEW_Config_FreeRTOS.c"
+)
+
 # Add sources to executable
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
-    # Add user sources here
+    ${SW_USER_SOURCES}
 )
 
 # Add include paths
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
-    # Add user defined include paths
+    "${CMAKE_SOURCE_DIR}/User"
+    "${CMAKE_SOURCE_DIR}/User/User_LED"
+    "${CMAKE_SOURCE_DIR}/User/User_IWDG"
+    "${CMAKE_SOURCE_DIR}/System"
+    "${CMAKE_SOURCE_DIR}/Bsp/Platform/drv_adapter_led"
+    "${CMAKE_SOURCE_DIR}/Bsp/Platform/drv_adapter_port_led"
+    "${CMAKE_SOURCE_DIR}/Middlewares/os_adapter/inc"
+    "${CMAKE_SOURCE_DIR}/Middlewares/os_adapter/shared/inc"
+    "${CMAKE_SOURCE_DIR}/Middlewares/os_adapter/FreeRTOS/inc"
+    "${CMAKE_SOURCE_DIR}/Middlewares/Third_Party/Log/Debug"
+    "${CMAKE_SOURCE_DIR}/Middlewares/Third_Party/Log/easylogger/inc"
+    "${CMAKE_SOURCE_DIR}/Middlewares/Third_Party/Cmbacktrace/cm_backtrace"
+    "${CMAKE_SOURCE_DIR}/Middlewares/Third_Party/SystemView/SEGGER"
+    "${CMAKE_SOURCE_DIR}/Middlewares/Third_Party/SystemView/Config"
+    "${CMAKE_SOURCE_DIR}/Middlewares/Third_Party/SystemView/Sample/FreeRTOSV10.4"
 )
 
 # Add project symbols (macros)
