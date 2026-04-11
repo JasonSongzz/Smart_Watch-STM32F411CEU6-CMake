@@ -167,9 +167,11 @@ standard names. */
 
 /* USER CODE BEGIN Defines */
 /* Section where parameter definitions can be added (for instance, to override default ones in FreeRTOS.h) */
+#define INCLUDE_xTaskGetIdleTaskHandle 1
+#define INCLUDE_pxTaskGetStackStart 1
 /* USER CODE END Defines */
 
-/* SEGGER SystemView：必须在 FreeRTOSConfig.h 末尾包含（官方要求） */
+/* SEGGER SystemView（Sample/FreeRTOSV10，与内核 10.3.x 匹配）：须在本文件末尾包含 */
 #include "SEGGER_SYSVIEW_FreeRTOS.h"
 
 #endif /* FREERTOS_CONFIG_H */

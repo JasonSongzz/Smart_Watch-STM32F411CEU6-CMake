@@ -28,6 +28,8 @@
 #include "User_LED.h"
 #include "User_IWDG.h"
 #include "Debug.h"
+#include "sfud.h"
+#include "user_log_tsdb.h"
 //******************************** Includes *********************************//
 
 //******************************** Variable **********************************//
@@ -47,13 +49,18 @@ static void userTaskInitFunction(void *argument)
 {
   /* USER CODE BEGIN userTaskFunction */
   {
+    if (sfud_init() == SFUD_SUCCESS) {
+      log_i("SFUD: W25Q64 (SPI1/PA4 CS) initialized");
+      user_log_tsdb_init();
+    } else {
+      log_e("SFUD: initialization failed");
+    }
 
     User_LED_Init();
-
-    osal_task_create("LedTask", User_Led_Task, 256 * 4,
+    osal_task_create("LedTask", User_Led_Task, 256,
         14, (osal_task_handle_t)(uintptr_t)&userLedTaskHandle, NULL);
 
-    osal_task_create("WatchDogTask", User_IWDG_Feed_Task, 256 * 4,
+    osal_task_create("WatchDogTask", User_IWDG_Feed_Task, 128,
         17, (osal_task_handle_t)(uintptr_t)&watchdogTaskHandle, NULL);
 
   }
@@ -73,7 +80,7 @@ int8_t UserAppTask_Init(void)
 {
   int8_t ret = (int8_t)0;
   /* Flash 配置初始化等需要一定栈深（原 512B 易在 UserConfig_Init 附近溢出） */
-  osal_task_create("userTask", userTaskInitFunction, 256 * 4,
+  osal_task_create("userTask", userTaskInitFunction, 512 * 4,
       16, (osal_task_handle_t)(uintptr_t)&userTaskInitHandle, NULL);
   return ret;
 }

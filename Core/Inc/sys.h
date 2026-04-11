@@ -4,7 +4,7 @@
 #include "stm32f4xx.h"
 #include "stm32f4xx_hal.h"
 
-#define OS_SUPPORT 	0
+#define OS_SUPPORT 	1
 #define SYS_CLK 		100
 
 typedef int32_t  s32;

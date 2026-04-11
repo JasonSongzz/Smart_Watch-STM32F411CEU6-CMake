@@ -27,6 +27,7 @@
 /* USER CODE BEGIN Includes */
 #include <cm_backtrace.h>
 #include "Debug.h"
+#include "SEGGER_RTT.h"
 #include "SEGGER_SYSVIEW.h"
 #include "User_Periph_Setup.h"
 /* USER CODE END Includes */
@@ -97,18 +98,19 @@ int main(void)
   MX_IWDG_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
+  SEGGER_RTT_Init();
   SEGGER_SYSVIEW_Conf();
   cm_backtrace_init("CmBacktrace", HARDWARE_VERSION, SOFTWARE_VERSION);
   debug_elog_init();
+  log_i("Main: System initialized");
   app_periph_init();
   /* USER CODE END 2 */
 
   /* Init scheduler */
   osKernelInitialize();  /* Call init function for freertos objects (in cmsis_os2.c) */
+  log_i("Main: Kernel initialized");
   MX_FREERTOS_Init();
-
-  /* IWDG 已在 MX_IWDG_Init 中运行；喂狗任务仅在调度启动后才执行，此处先喂一次避免窗口内复位 */
-  (void)HAL_IWDG_Refresh(&hiwdg);
+  log_i("Main: FREERTOS initialized");
 
   /* Start scheduler */
   osKernelStart();

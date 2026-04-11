@@ -6,6 +6,7 @@
 #include "User_IWDG.h"
 #include "iwdg.h"
 #include "osal.h"
+#include "Debug.h"
 
 #ifndef USER_IWDG_FEED_MS
 #define USER_IWDG_FEED_MS (1000U)
